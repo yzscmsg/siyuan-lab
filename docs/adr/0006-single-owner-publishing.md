@@ -97,6 +97,25 @@ The granular publishing layer is implemented and contract-tested:
   HTTP facade wrapping `can_consume`/`published_to` is the Week-9+ PoC-3
   (identity/RLS) item; the authorization boundary is already schema-enforced.
 
+### V8 mobile test surface (2026-08-03)
+
+The family-UX dimension (weight 15) is human-only and was left unscored. To
+make it *runnable*, a minimal read-only family-view surface now exists:
+
+- `scripts/family_view.py` — stdlib (zero new deps), serves the feed +
+  document render, talks **only** to `lifeos-pg`, never the SiYuan kernel.
+- Caddy `/family` route + `host/run_family_view.sh` launcher; seeded publish
+  scenario in `scripts/seed_v8_grants.sql`.
+- `scripts/v8_smoke_test.py` — **11/11 automated checks** (login → per-persona
+  feeds → granted doc → default-deny doc → audit → zero SiYuan kernel
+  reference).
+- Protocol for the 5 real-family phone tasks + grading rubric:
+  `docs/implementation/05-v8-mobile-test.md` (clean run maps to +15 →
+  83.9/90, above the 80 adopt threshold).
+
+Only the **human phone run** remains. Identity is test-grade (persona cookie),
+explicitly not production auth — the real facade is Week-9 PoC-3 (identity/RLS).
+
 ## Status of dependent decisions
 
 - ADR-0003: superseded in part — the "single-user workbench, never the family

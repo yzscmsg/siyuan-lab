@@ -56,7 +56,7 @@ for decision purposes.
 | Data ownership & exit | 20 | 1.00 | **20.0** | Export+fidelity clean, fresh-instance rebuild verified, canonical store independent (52 rows in LifeOS Postgres) |
 | Security & permission | 20 | 1.00 | **20.0** | Single-owner console owner-only reachable (kernel loopback-bound), edge blocks anonymous access; family boundary = LifeOS publishing (ADR-0006) |
 | Solo operating cost | 20 | 0.695 | **13.9** | 2 containers for SiYuan (kernel+caddy); restore 2.1 min, upgrade+rollback 4.0 min, weekly maintenance 6.8 min |
-| Features & family UX | 15 | 0.00 | **0.0** | UNSCORED until the 5 real family tasks are done on a real phone (V8, human-only) |
+| Features & family UX | 15 | 0.00 | **0.0** | UNSCORED until the 5 real family tasks are run on a real phone. **Protocol + test surface are READY** (docs/implementation/05-v8-mobile-test.md; `scripts/family_view.py` + Caddy `/family` route + `scripts/v8_smoke_test.py` 11/11). Grading rubric there maps a clean run to +15 (→ 83.9/90, above the 80 adopt threshold). |
 | Integration & automation | 15 | 1.00 | **15.0** | Idempotent handoff into canonical store (3x delivery, zero SiYuan-internal reads); API suite green |
 | Quality & performance | 10 | — | — | Out of scope for S1 (golden-set accuracy is D1/I1) |
 | **Total** | **90 available** | | **68.9** | Normalised **76.6/100**; `adopt` needs ≥80 |
@@ -133,11 +133,16 @@ Reasoning:
 
 ### What would move this to `adopt`
 
-- V8 mobile/family-task test coming back positive (up to +15 on family-UX).
-- The LifeOS granular publishing layer built and a family member proven to
-  consume published items with no SiYuan access at all (completes the
-  ADR-0006 boundary end-to-end).
-- Together these could push the score above 80.
+- **V8 mobile/family-task test run and coming back positive** (up to +15 on
+  family-UX). The protocol and a runnable test surface now exist
+  (docs/implementation/05-v8-mobile-test.md); the machine side is already
+  verified (11/11). Only the human phone run remains — a clean run maps to
+  +15 → 83.9/90, above the 80 threshold.
+- The LifeOS granular publishing layer **is built** (migration `0007`) and a
+  family member is proven to consume published items with **no SiYuan access
+  at all** — both the schema contract (10/10) and the on-device surface
+  (11/11) confirm the ADR-0006 boundary end-to-end.
+- Together these push the score above 80.
 
 ### What would move this to `hold`
 

@@ -5,13 +5,27 @@
 {$SITE_ADDRESS:192.168.88.9} {
     tls internal
 
+    # ---- V8 family consumption surface (ADR-0006 / ADR-0009) ----
+    # Family members consume LifeOS-published content here. It is a SEPARATE
+    # surface from the SiYuan admin console below: the viewer process runs on
+    # the host (0.0.0.0:6900) and reaches ONLY lifeos-pg, never the SiYuan
+    # kernel. handle_path strips /family so the upstream sees root paths.
+    handle_path /family* {
+        reverse_proxy host.docker.internal:6900 {
+            header_up Host {host}
+            header_up X-Real-IP {remote_host}
+        }
+    }
+
     # NOTE: basicauth via `caddy hash-password` is unavailable in this image
     # (returns "Error: EOF" on the PoC host); auth is enforced by the SiYuan
     # lock screen (accessAuthCode) for the UI and the API token (secret store)
     # for /api/* calls. Re-enable basicauth in production once a hash can be
     # generated (see docs/adr/0001).
-    reverse_proxy siyuan:6806 {
-        header_up Host {host}
-        header_up X-Real-IP {remote_host}
+    handle {
+        reverse_proxy siyuan:6806 {
+            header_up Host {host}
+            header_up X-Real-IP {remote_host}
+        }
     }
 }
