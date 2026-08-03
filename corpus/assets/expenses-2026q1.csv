@@ -1,0 +1,15 @@
+id,name,category,amount_sgd,recorded_on
+1,expense-01,medical,781.44,2026-02-02
+2,expense-02,school,224.63,2026-03-03
+3,expense-03,insurance,571.44,2026-04-04
+4,expense-04,utility,66.61,2026-05-05
+5,expense-05,medical,278.51,2026-06-06
+6,expense-06,school,593.73,2026-07-07
+7,expense-07,insurance,613.96,2026-08-08
+8,expense-08,utility,641.26,2026-09-09
+9,expense-09,medical,762.19,2026-01-10
+10,expense-10,school,704.75,2026-02-11
+11,expense-11,insurance,173.64,2026-03-12
+12,expense-12,utility,137.77,2026-04-13
+13,expense-13,medical,780.53,2026-05-14
+14,expense-14,school,519.67,2026-06-15

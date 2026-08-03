@@ -1,0 +1,227 @@
+generated: '2026-08-03'
+seed: 20260803
+docs:
+  c01:
+    file: c01.md
+    sha256: 0bc14f28ce43f52202974e786a43db5b6d62ad2eae1359ac7f56f63b5510d258
+    features: EN article + table
+    kind: corpus
+    attachments: []
+  c02:
+    file: c02.md
+    sha256: 0d4267d224faf8ab66e1a7a11d39ae21043b73f4c8666a655d283bdcca4f3091
+    features: EN long-form + attachment
+    kind: corpus
+    attachments:
+    - diagram-arch.png
+  c03:
+    file: c03.md
+    sha256: 18bb4d05e44d97d8dac3b57eebe4b6350762fbd53e85eed0618f74133a41dd63
+    features: EN + image embed + attachment
+    kind: corpus
+    attachments:
+    - diagram-flow.png
+  c04:
+    file: c04.md
+    sha256: 0078a0836b61c6331aad6a81723b5e8aac86b3d126c260e9ddce12b163009841
+    features: EN + code + attachment
+    kind: corpus
+    attachments:
+    - photo-scan-01.png
+  c05:
+    file: c05.md
+    sha256: bb6db5b773bd2cc58f9ea2db09f2543dc92dcc271c1d3cdf6c188407ae467897
+    features: EN + internal link + attachment
+    kind: corpus
+    attachments:
+    - photo-scan-02.png
+  c06:
+    file: c06.md
+    sha256: 10982638526fc60ffa78e43f4399829d7eadde890f6fcd5ce16c5bfc3c64e48b
+    features: ZH 运营复盘 + 表格
+    kind: corpus
+    attachments: []
+  c07:
+    file: c07.md
+    sha256: 1c300e850977fece90ddd2804b572c83a7aff95bb3a64b29d9c2390328bbb50c
+    features: ZH 长文 + attachment
+    kind: corpus
+    attachments:
+    - receipt-2026-01.png
+  c08:
+    file: c08.md
+    sha256: dc885e2b71a9b411bcb51d25d65a5cd4a492fd3a2d1c330dc4b82c686d86b7bd
+    features: ZH + 图片 + attachment
+    kind: corpus
+    attachments:
+    - receipt-2026-02.png
+  c09:
+    file: c09.md
+    sha256: f8e0179621c3281f19faa374cd0702bb236e68c7c5e24b8d87f634bf40559286
+    features: ZH + 代码 + attachment
+    kind: corpus
+    attachments:
+    - policy-terms.pdf
+  c10:
+    file: c10.md
+    sha256: f65fa32ebca491f39142ba9b44be10253f241d77ed38cf6c18564e02fb69d091
+    features: ZH + 内部链接 + attachment
+    kind: corpus
+    attachments:
+    - medical-report.pdf
+  c11:
+    file: c11.md
+    sha256: ed0832a64e9c41c59a798bb89852f7bdf5beec46ad8f88490769fd04f2325193
+    features: Bilingual intro + attachment
+    kind: corpus
+    attachments:
+    - school-notice.pdf
+  c12:
+    file: c12.md
+    sha256: 57fb05829cc56e22f78cc6427813734865532209b677bf405d0e2a5594f9ea0f
+    features: Bilingual policy + attachment
+    kind: corpus
+    attachments:
+    - expenses-2026q1.csv
+  c13:
+    file: c13.md
+    sha256: 4630bd8df0f5f79dea3b914b6c2dff73e69fe483e25973470874447febadc7f1
+    features: Bilingual glossary + attachment
+    kind: corpus
+    attachments:
+    - inventory.csv
+  c14:
+    file: c14.md
+    sha256: cecb7b66dba4faccd32675653e0673b6576f672a8605d377c4f41cbe12182ab3
+    features: Bilingual tasks + attachment
+    kind: corpus
+    attachments:
+    - readings.csv
+  c15:
+    file: c15.md
+    sha256: dcc082f0af15d325f0c0bd07b846eb3ee4c850d16d5fc0823296c29af72c9a3b
+    features: Bilingual FAQ + attachment
+    kind: corpus
+    attachments:
+    - notes-plain.txt
+  c16:
+    file: c16.md
+    sha256: a0a0aec043a735c3d1ae65e0bde01b57f400088b3f51c9177dd378c38f18725c
+    features: PDF attachment link
+    kind: corpus
+    attachments: []
+  c17:
+    file: c17.md
+    sha256: b9ff1af1c8a5358e49b0a1f3155740bc19e50bbf3bf3d8228658b575657716a5
+    features: Quote + nested headings + attachment
+    kind: corpus
+    attachments:
+    - recovery-steps.txt
+  c18:
+    file: c18.md
+    sha256: 93007f771fedd1834d77d88ef67b4e7fc52343cd8d74080764533c5f0e313362
+    features: Checklist + attachment
+    kind: corpus
+    attachments:
+    - changelog.txt
+  c19:
+    file: c19.md
+    sha256: 97aad05175ebb97ae1daa07f052073525b8cb897cb260cf05fd82ebffbea5081
+    features: Mixed en/zh table + attachment
+    kind: corpus
+    attachments:
+    - icon-family.svg
+  c20:
+    file: c20.md
+    sha256: 1c58d97bdaff2c6b4352850dd46022637195736ba75ea305e696dc5171566e8c
+    features: Index hub + attachment
+    kind: corpus
+    attachments:
+    - icon-private.svg
+  n01:
+    file: n01.md
+    sha256: f365a00d372c83fe2fa3d8e4c553fb70b17641f79ba794a69e9978178cb7368e
+    features: Welcome + block ref + wikilink
+    kind: native
+    attachments: []
+  n02:
+    file: n02.md
+    sha256: feb3974a5f2f5b9077ed1eaa0f6a358314a8e8a8497cd9e9d031c1b1d45eb28a
+    features: Template example
+    kind: native
+    attachments: []
+  n03:
+    file: n03.md
+    sha256: b509361d12cf6975fdf378d79cbfcc2b7f13cf8343759b65251a088214284e3a
+    features: Tags example
+    kind: native
+    attachments: []
+  n04:
+    file: n04.md
+    sha256: 593da1e26481018d68be81321be8c5bca46d97367a4de1229604103a750680dc
+    features: Wikilinks example
+    kind: native
+    attachments: []
+  n05:
+    file: n05.md
+    sha256: 59d518203c5997e07ce6268acb9cc6e5e871b24e3837b711cd7d8bc7c0609257
+    features: Attachment example
+    kind: native
+    attachments: []
+  n06:
+    file: n06.md
+    sha256: d30967bf02019822ff64f88b5d6f95f9667dcd14e51e95477b7a8d206dff7848
+    features: Block ref target + attachment
+    kind: native
+    attachments:
+    - meta-doc.json
+  n07:
+    file: n07.md
+    sha256: 56bb24e060bf09c537bcb3af00526a79f3023fba66b85612625dbc16d9944116
+    features: Query / DB view example + attachment
+    kind: native
+    attachments:
+    - meta-retention.json
+  n08:
+    file: n08.md
+    sha256: ac707289d56a052eb74629362146fb00118bd77c063b56fb19d32d512d9543ab
+    features: Long native note
+    kind: native
+    attachments: []
+  n09:
+    file: n09.md
+    sha256: 14d7c9556fecea3469fd6fd144350e49badb4f6b7f4c65eeb73652976da02d96
+    features: Table native + attachment
+    kind: native
+    attachments:
+    - archive-manifest.json
+  n10:
+    file: n10.md
+    sha256: a13cb2e8e22c10507af17d3f09e04766e26813f8b5dfab2321ff0f92ed8ef22d
+    features: Summary native
+    kind: native
+    attachments: []
+assets:
+  sample-chart.png: 2b2675f5742dcb11541236081404739ff8c55ab8c0e2698b4615fac354198b4a
+  sample-doc.pdf: a605f48aa061abb2c23039e596bc47abb0b9f87c634dc7be1c6b4bc594a06569
+  diagram-arch.png: d90caa4c731930dbf321f108be6a97ccf90c54ee363fb4d733e7e2da305a7367
+  diagram-flow.png: 8a4ad20ede5476701557c193ba8b355678f6004f27b6c0e95e3f57083a99dea5
+  photo-scan-01.png: 23b0641ce70b07a14c540518aaa3f0f3a97410ec0bc76482323080e0d8948305
+  photo-scan-02.png: b19e400aa16487175326aad14c212e537f95c23c73a72c77a33ea5abdb6d8e3a
+  receipt-2026-01.png: 74cff972d14cccbd922703ae617e43667fc8892e2cdaf423f6bfb34a777eb994
+  receipt-2026-02.png: 7699184d15fdd2a7473135811775be5bff01af2a7bb471d7a9049e9c0d294b25
+  policy-terms.pdf: 36284c8298a65259fb79907194795b00c1507e92c491833435d345d8a1a85c10
+  medical-report.pdf: 6a74f08a05aba4a37bf9bb5e5c6762b52f99d1aecf00c29cc7894f96efb9771e
+  school-notice.pdf: bf85aa350447eb10eb579e48c7176384f0da16affbf52479b29ab2ba56aa57b4
+  expenses-2026q1.csv: cc1dd2ddfd997755a8ce084b94c4e68a420dec812141ce08748415aa049b273e
+  inventory.csv: a1478fa70d2ecb42c5f5d5f253a76652e5dc574caafd0632db5b651c429f95e9
+  readings.csv: 3819c6aa5bec57031c2f5bc19a0cefd090728259910a0d024c54ce5c8217191b
+  notes-plain.txt: 2be92dc1359974825c4bfa44babc685f6fce4470fc9a7ea4df65fde142c7d6e6
+  recovery-steps.txt: 25d80d7259ce90027e2ed38712965da11779be9a42a5e62999744f21faa34698
+  changelog.txt: 847a6736d1df61d7821246d85b7fd6f6109f8b63ab95eb1ff9f85bea3fa8149f
+  icon-family.svg: 4a88cc7ba43f5c30b93e907a23f6104bcc317c3a09ae3379e21f6f02a8b3b089
+  icon-private.svg: 6f44a9f25fe0d7bc79bb32c77da5299a0e148d3f3a7f21b5fee9143e80aed32f
+  meta-doc.json: ec122a9deedfba0eb879be0ed5b7f4fd33ef39a1ca6f2248261d44ab81a9dece
+  meta-retention.json: 08f5c46a96958df8dffd3f353ef3a53ebccb624d94491603502196d7e6ebc0da
+  archive-manifest.json: 9e1fd4454f6a304172b21c49dec0460d059ee212a1c8803dd4d8ee461438143d
+features: {}

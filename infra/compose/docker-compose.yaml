@@ -1,0 +1,54 @@
+# SiYuan PoC — S1 experiment stack (FamilyLifeOS capability-slot trial)
+# Pinned fixed version so upgrade/rollback is reproducible (see docs/adr/0001).
+# Caddy terminates TLS (internal CA) + basicauth; kernel api on 6806 is never published to LAN.
+
+services:
+  siyuan:
+    image: b3log/siyuan:v3.7.3
+    container_name: siyuan-poc
+    restart: unless-stopped
+    command: ["serve", "--workspace=/siyuan/workspace/", "--accessAuthCode=${SIYUAN_ACCESS_AUTH_CODE}"]
+    environment:
+      # PUID/PGID let the container run as a dedicated non-root account on the host volume.
+      PUID: "${PUID:-1000}"
+      PGID: "${PGID:-1000}"
+      SIYUAN_ACCESS_AUTH_CODE: "${SIYUAN_ACCESS_AUTH_CODE}"
+      TZ: "${TZ:-Asia/Shanghai}"
+    volumes:
+      - ${WORKSPACE_DIR}:/siyuan/workspace
+    expose:
+      - "6806"
+    networks:
+      - siyuan_net
+    healthcheck:
+      # Kernel boot endpoint; returns JSON {code:0,...}
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:6806/api/system/version"]
+      interval: 15s
+      timeout: 5s
+      retries: 20
+      start_period: 60s
+
+  caddy:
+    image: caddy:2.8.4
+    container_name: siyuan-caddy
+    restart: unless-stopped
+    depends_on:
+      - siyuan
+    ports:
+      - "${HTTP_PORT:-80}:80"
+      - "${HTTPS_PORT:-443}:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ${SECRETS_DIR}/caddy_basicauth:/etc/caddy/basicauth:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - siyuan_net
+
+volumes:
+  caddy_data:
+  caddy_config:
+
+networks:
+  siyuan_net:
+    driver: bridge

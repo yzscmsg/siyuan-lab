@@ -1,0 +1,18 @@
+# ---- secrets & evidence (never push) ----
+# Evidence dirs are regenerable by the suite and may contain secret-bearing
+# archives (escrow tarball, backup tarballs with conf/conf.json API token).
+secrets/
+exports/
+results/
+backups/
+workspace/
+dbprobe/
+
+# ---- python ----
+__pycache__/
+*.pyc
+.venv/
+
+# ---- editor/os ----
+.DS_Store
+Thumbs.db

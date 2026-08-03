@@ -1,0 +1,6 @@
+Recovery steps 恢复步骤
+===================
+
+This plain-text attachment exercises non-image, non-PDF binary handling in
+the SiYuan asset pipeline. It contains CJK to catch encoding regressions:
+中文附件内容：备份、恢复、导出、回滚。

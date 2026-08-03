@@ -1,0 +1,17 @@
+# SiYuan PoC Caddy — TLS (internal CA) + basicauth in front of the kernel.
+# The kernel (siyuan:6806) is NOT published to the LAN; all traffic goes through here.
+# basicauth hash is loaded from /etc/caddy/basicauth (htpasswd-style, written by deploy.sh).
+
+{$SITE_ADDRESS:192.168.88.9} {
+    tls internal
+
+    # NOTE: basicauth via `caddy hash-password` is unavailable in this image
+    # (returns "Error: EOF" on the PoC host); auth is enforced by the SiYuan
+    # lock screen (accessAuthCode) for the UI and the API token (secret store)
+    # for /api/* calls. Re-enable basicauth in production once a hash can be
+    # generated (see docs/adr/0001).
+    reverse_proxy siyuan:6806 {
+        header_up Host {host}
+        header_up X-Real-IP {remote_host}
+    }
+}

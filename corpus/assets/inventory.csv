@@ -1,0 +1,10 @@
+id,name,category,amount_sgd,recorded_on
+1,item-01,medical,529.33,2026-02-02
+2,item-02,school,797.59,2026-03-03
+3,item-03,insurance,889.73,2026-04-04
+4,item-04,utility,829.88,2026-05-05
+5,item-05,medical,854.95,2026-06-06
+6,item-06,school,622.27,2026-07-07
+7,item-07,insurance,106.79,2026-08-08
+8,item-08,utility,387.57,2026-09-09
+9,item-09,medical,483.58,2026-01-10
