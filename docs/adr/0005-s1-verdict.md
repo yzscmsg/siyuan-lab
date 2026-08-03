@@ -84,9 +84,13 @@ dimension that belongs to D1/I1.
   example — yields zero matches in v3.7.3. Recorded in `api_client.py`.
 - The lab stays reversible at all times: `run.sh clean-remote` / token revoke;
   exported Markdown + backup archives remain readable without SiYuan.
-- The week-4 Document API must enforce `status`/`version`/`supersedes` and
-  `media_type`/`storage_uri` constraints (S1-D3/D4) that `core.document` does
-  not yet express.
+- The week-4 Document API constraints (S1-D3/D4) are **closed at the schema
+  level** by `infra/lifeos-migrations/0006_document_contract.sql` (applied
+  2026-08-03): `core.document` now has `status`/`version`/`supersedes`
+  (retraction expressed via the `status` column, verified by retraction L4) and
+  `media_type` CHECK + `storage_uri` validation (contract tests C4/C5 expect and
+  observe DB-level rejection). What remains for the week-4 API layer is the
+  thin HTTP facade over these already-constrained tables, plus publishing ACLs.
 
 ## Open item that can reopen this decision
 

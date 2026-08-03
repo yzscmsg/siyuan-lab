@@ -1,4 +1,10 @@
-"""SFTP-push the siyuan-lab repo to the VM (excludes secrets/.env). Idempotent."""
+"""SFTP-push the siyuan-lab repo to the VM (excludes secrets/.env). Idempotent.
+
+Evidence dirs (exports/, backups/, workspace/, dbprobe/) are VM-runtime outputs:
+they flow VM -> local via host/pull.py, never local -> VM. Pushing stale local
+copies over freshly generated VM reports silently corrupts acceptance runs
+(e.g. a pre-ADR-0006 negative_report.json clobbering the current one).
+"""
 import os, sys
 sys.path.insert(0, r"C:/Users/georg/WorkBuddy/Siyuan/_refs")
 import sshlib
@@ -6,7 +12,9 @@ import paramiko
 
 LOCAL = r"C:/Users/georg/WorkBuddy/Siyuan/siyuan-lab"
 REMOTE = "/opt/siyuan-lab"
-SKIP = {".git", "secrets", ".env", "__pycache__", "results"}
+# runtime/evidence dirs are excluded: they are generated ON the VM by the suite.
+SKIP = {".git", "secrets", ".env", "__pycache__", "results",
+        "exports", "backups", "workspace", "dbprobe"}
 
 def walk(local, remote, sftp):
     for name in sorted(os.listdir(local)):

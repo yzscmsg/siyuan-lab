@@ -130,6 +130,12 @@ def main():
     # ---- L4 LifeOS canonical reconciliation ----
     # rebuild the set of hashes still present in the export, then withdraw anything
     # canonical that the export no longer vouches for.
+    # is there a first-class status column? (migration 0006 adds it)
+    rc3, cols, _e = psql(
+        "select column_name from information_schema.columns "
+        "where table_schema='core' and table_name='document'")
+    schema_gap = "status" not in cols.split()
+
     live = set()
     for root, _d, files in os.walk(EXPORT_MD):
         for fn in files:
@@ -137,28 +143,31 @@ def main():
             live.add(hashlib.sha256(open(p, "rb").read()).hexdigest())
     hh_rc, hh, _ = psql("select id from core.household where name=%s" % lit(HOUSEHOLD_NAME))
     withdrawn = 0
-    schema_gap = False
     if hh:
         rc, out, err = psql(
             "select sha256 from core.document where household_id=%s" % lit(hh))
         canon = [h for h in out.splitlines() if h.strip()]
         gone = [h for h in canon if h not in live]
         for h in gone:
-            rc2, _o, _e = psql(
-                "update core.document set metadata = metadata || "
-                "jsonb_build_object('status','withdrawn','withdrawn_at', now()::text) "
-                "where household_id=%s and sha256=%s" % (lit(hh), lit(h)))
+            if schema_gap:
+                # legacy path: no status column, express in metadata jsonb
+                rc2, _o, _e = psql(
+                    "update core.document set metadata = metadata || "
+                    "jsonb_build_object('status','withdrawn','withdrawn_at', now()::text) "
+                    "where household_id=%s and sha256=%s" % (lit(hh), lit(h)))
+            else:
+                # first-class lifecycle column (migration 0006): status is now
+                # constrained and queryable, not a free-form jsonb flag
+                rc2, _o, _e = psql(
+                    "update core.document set status='withdrawn', version=version, "
+                    "metadata = metadata || jsonb_build_object('withdrawn_at', now()::text) "
+                    "where household_id=%s and sha256=%s" % (lit(hh), lit(h)))
             if rc2 == 0:
                 withdrawn += 1
             psql("insert into audit.event(actor_type, action, object_type, household_id, outcome, details) "
                  "values ('service','withdraw','document',%s,'success',"
                  "jsonb_build_object('sha256',%s,'reason','absent from portable export'))"
                  % (lit(hh), lit(h)))
-        # is there a first-class status column?
-        rc3, cols, _e = psql(
-            "select column_name from information_schema.columns "
-            "where table_schema='core' and table_name='document'")
-        schema_gap = "status" not in cols.split()
         rep["layers"]["L4_lifeos_canonical"] = {
             "canonical_rows": len(canon),
             "absent_from_export": len(gone),
