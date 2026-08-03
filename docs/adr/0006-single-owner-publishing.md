@@ -79,6 +79,24 @@ members credentials to the authoring tool.
 - The deploy constraint hardens: the kernel port must stay loopback-bound
   (never `0.0.0.0:6806`); any change to expose it reverts HG3 to FAIL.
 
+## Status (2026-08-03): publishing layer BUILT
+
+The granular publishing layer is implemented and contract-tested:
+
+- **Schema** `infra/lifeos-migrations/0007_publishing_layer.sql` (mirrored to
+  `family-lifeos/db/migrations`): `core.publish_grant` (per-item / per-person /
+  per-role / per-household read ACL, default-deny), SQL-side resolution
+  `core.can_consume(doc, person)` + `core.published_to(person)`, and the trigger
+  `publish_grant_owner_guard_tg` enforcing owner-only publish + member-only person
+  grants. The boundary is encoded in the schema, not trusted to the application.
+- **Boundary proof** `scripts/lifeos_publish.py` (run on the VM against
+  `lifeos-pg`): consumes from the existing 51-row canonical fixture; asserts the
+  process touched ONLY `lifeos-pg` — never a SiYuan endpoint, credential, or
+  container. Family members consume with zero SiYuan credentials.
+- **Contract result: 10/10 cases pass**, 45 audit events. Remaining: the thin
+  HTTP facade wrapping `can_consume`/`published_to` is the Week-9+ PoC-3
+  (identity/RLS) item; the authorization boundary is already schema-enforced.
+
 ## Status of dependent decisions
 
 - ADR-0003: superseded in part — the "single-user workbench, never the family
