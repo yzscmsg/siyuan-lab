@@ -1,6 +1,10 @@
-# SiYuan PoC Caddy — TLS (internal CA) + basicauth in front of the kernel.
+# SiYuan PoC Caddy - TLS (internal CA) + basicauth in front of the kernel.
 # The kernel (siyuan:6806) is NOT published to the LAN; all traffic goes through here.
-# basicauth hash is loaded from /etc/caddy/basicauth (htpasswd-style, written by deploy.sh).
+#
+# Known limitation (Caddy 2.8): the internal cert is only served to clients that
+# send the IP as SNI. Most browsers do; curl/python/PowerShell on Windows against
+# a raw IP do not. For automation and V8 smoke tests, use the plain-HTTP viewer
+# on :6901 instead. (ADR-0009: viewer talks only to lifeos-pg, never the kernel.)
 
 {$SITE_ADDRESS:192.168.88.9} {
     tls internal
@@ -8,10 +12,16 @@
     # ---- V8 family consumption surface (ADR-0006 / ADR-0009) ----
     # Family members consume LifeOS-published content here. It is a SEPARATE
     # surface from the SiYuan admin console below: the viewer process runs on
-    # the host (0.0.0.0:6900) and reaches ONLY lifeos-pg, never the SiYuan
-    # kernel. handle_path strips /family so the upstream sees root paths.
+    # the host and reaches ONLY lifeos-pg, never the SiYuan kernel.
+    #
+    # Two viewers run on the host:
+    #   - 0.0.0.0:6900 (legacy)
+    #   - 0.0.0.0:6901 (preferred; used by V8 smoke)
+    # 172.18.0.1 is the siyuan_net bridge gateway (the host as seen from the
+    # container). deploy.sh also adds --add-host host.docker.internal:host-gateway
+    # so either name works.
     handle_path /family* {
-        reverse_proxy host.docker.internal:6900 {
+        reverse_proxy 172.18.0.1:6901 {
             header_up Host {host}
             header_up X-Real-IP {remote_host}
         }

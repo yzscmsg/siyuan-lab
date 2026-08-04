@@ -28,15 +28,45 @@ CTX = ssl.create_default_context()
 CTX.check_hostname = False
 CTX.verify_mode = ssl.CERT_NONE
 
-# known lab fixtures (see scripts/seed_v8_grants.sql + 0002/0007)
-ADULT = "c9083aad-5db1-49dc-9afd-4a5f13d92b8c"
-MEMBER = "7ee1bb39-b7f7-428e-8019-78c7feb4de11"
-OWNER = "35d16bc5-58f6-4759-a64f-77a079e861d4"
+# Lab fixtures are looked up dynamically from lifeos-pg so the smoke test
+# stays valid across reseeds (core.document / core.person use gen_random_uuid).
+# Falls back to known defaults for environments where the DB is unavailable.
+
+def _pg_one(sql):
+    """Run a psql query inside the lifeos-pg container and return the first
+    column of the first row (or None)."""
+    try:
+        out = subprocess.run(
+            ["docker", "exec", "-i", "lifeos-pg", "psql", "-At", "-U", "lifeos",
+             "-d", "lifeos", "-c", sql],
+            capture_output=True, text=True, timeout=10,
+        )
+        line = (out.stdout or "").strip().splitlines()
+        return line[0] if line else None
+    except Exception:
+        return None
+
+
+def _lookup_person(name):
+    return _pg_one(
+        "SELECT id FROM core.person WHERE name='%s' LIMIT 1" % name
+    )
+
+
+def _lookup_doc(title):
+    return _pg_one(
+        "SELECT id FROM core.document WHERE title='%s' LIMIT 1" % title
+    )
+
+
+ADULT = _lookup_person("Adult Lab") or "c9083aad-5db1-49dc-9afd-4a5f13d92b8c"
+MEMBER = _lookup_person("Member Lab") or "7ee1bb39-b7f7-428e-8019-78c7feb4de11"
+OWNER = _lookup_person("Owner Lab") or "35d16bc5-58f6-4759-a64f-77a079e861d4"
 DOC = {
-    "n06_household": "71cef654-449a-4661-9a5a-01455b603986",
-    "n07_adult":     "92893b09-cdb8-493c-93f7-a78660ae2cc7",
-    "n08_member":    "61763ae1-c426-414e-97cc-41d2a8679dea",
-    "n09_ungranted": "e4e6e89a-c295-41b4-9e25-543079d76e54",
+    "n06_household": _lookup_doc("n06") or "8205f92d-89dd-43d5-a1f3-add10628e472",
+    "n07_adult":     _lookup_doc("n07") or "5f1ad6c8-ed7d-4cc0-8bc1-f458972daf37",
+    "n08_member":    _lookup_doc("n08") or "403de9a2-f690-44d3-85eb-09f4178aadb8",
+    "n09_ungranted": _lookup_doc("n09") or "479d0e24-57ad-4576-9f25-42fb2a9d7425",
 }
 
 results = {}

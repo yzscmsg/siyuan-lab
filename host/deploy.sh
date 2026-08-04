@@ -35,6 +35,7 @@ docker run -d --name siyuan-poc --restart unless-stopped --network "$NET" \
 docker rm -f siyuan-caddy 2>/dev/null || true
 docker run -d --name siyuan-caddy --restart unless-stopped --network "$NET" \
   -e SITE_ADDRESS=192.168.88.9 \
+  --add-host host.docker.internal:host-gateway \
   -p 80:80 -p 443:443 \
   -v "$BASE/infra/compose/Caddyfile":/etc/caddy/Caddyfile:ro \
   "$CADDY_IMG"
