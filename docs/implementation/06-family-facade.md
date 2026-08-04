@@ -56,7 +56,7 @@ server-signed session. Impersonation becomes impossible by construction.
 | File | Role |
 | --- | --- |
 | `infra/lifeos-migrations/0008_auth_accounts.sql` | `core.auth_account` (person FK, username unique, PBKDF2 `pw_hash`, `failed_attempts`, `locked_until`, `disabled_at`, `session_version`) + trigger guard that the person is a current member of an active household. Mirrored to `family-lifeos/db/migrations/0008_auth_accounts.sql`. |
-| `scripts/family_facade.py` | The facade: real `/login`, signed session, RLS via `can_consume`/`published_to`, audit, zero SiYuan reference. stdlib only. |
+| `scripts/family_facade.py` | The facade: real `/login`, signed session, authorization boundary via `can_consume`/`published_to`, audit, zero SiYuan reference. stdlib only. |
 | `scripts/seed_facade_accounts.py` | LAB-ONLY idempotent account provisioning (PBKDF2 hashes). Not production account creation. |
 | `scripts/facade_smoke_test.py` | Real-auth smoke test: login → per-persona feeds → grants/denials → **forged-session rejection** → **privilege-escalation denial** → audit → zero SiYuan. |
 | `host/run_family_facade.sh` | Launcher on `:6902`; fails closed if `FAMILY_FACADE_SECRET` is unset. |

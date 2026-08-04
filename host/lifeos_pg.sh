@@ -4,10 +4,13 @@
 # Roadmap step 8: "将导出内容交给第4周 Document API 注册；LifeOS 分配 UUID/owner/
 # ACL/hash，禁止读取思源内部数据库或数据目录。"
 #
-# The week-4 Document API is not implemented yet, but its schema IS: this brings
-# up postgres:16 and applies family-lifeos db/migrations verbatim (vendored at
-# infra/lifeos-migrations, provenance commit f597f61), using the same
-# checksummed-idempotent semantics as the repo's scripts/admin/migrate.sh.
+# This brings up postgres:16 and applies family-lifeos db/migrations (synced
+# from the canonical family-lifeos repo via scripts/sync_from_family_lifeos.sh)
+# using the same checksummed-idempotent semantics as scripts/admin/migrate.sh.
+#
+# PREREQUISITE: run `bash scripts/sync_from_family_lifeos.sh /path/to/family-lifeos`
+# before pushing to the lab VM. The migrations are NOT committed to siyuan-lab
+# (per ADR-0007 / ADR-0011); they are synced on demand.
 #
 # That gives the handoff test the real constraint that matters:
 #   core.document UNIQUE (household_id, sha256)
@@ -20,6 +23,12 @@ CT=lifeos-pg
 DB=lifeos
 DBUSER=lifeos
 PGPORT=${PGPORT:-55432}
+
+if [[ ! -d "$MIG" ]] || [[ -z "$(ls "$MIG"/*.sql 2>/dev/null)" ]]; then
+  echo "[lifeos-pg] FAIL: no migrations found at $MIG" >&2
+  echo "[lifeos-pg] Run: bash scripts/sync_from_family_lifeos.sh /path/to/family-lifeos" >&2
+  exit 2
+fi
 
 mkdir -p "$BASE/secrets"
 if [[ ! -f "$BASE/secrets/pg_password" ]]; then

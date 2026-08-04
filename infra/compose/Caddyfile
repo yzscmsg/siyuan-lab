@@ -9,7 +9,8 @@
 {$SITE_ADDRESS:192.168.88.9} {
     tls internal
 
-    # ---- PRODUCTION family consumption surface (ADR-0006 / ADR-0009) ----
+    # ---- DEFERRED PoC family consumption surface (ADR-0007 / ADR-0009) ----
+    # SYNTHETIC DATA ONLY -- not a production identity boundary.
     # Family members sign in (real auth, migration 0008) and consume
     # LifeOS-published content here. It is a SEPARATE surface from the SiYuan
     # admin console below: the facade process runs on the host and reaches ONLY
@@ -19,7 +20,7 @@
     # impossible by construction.
     #
     # Host-side processes:
-    #   - 0.0.0.0:6902  family_facade.py  (PRODUCTION, real auth)  <- /family
+    #   - 0.0.0.0:6902  family_facade.py  (DEFERRED PoC, synthetic data)  <- /family
     #   - 0.0.0.0:6901  family_view.py    (V8 test surface, legacy, retired)
     # 172.18.0.1 is the siyuan_net bridge gateway (the host as seen from the
     # container). deploy.sh also adds --add-host host.docker.internal:host-gateway

@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-family_facade.py -- PRODUCTION LifeOS family-consumption facade (PoC-3).
+family_facade.py -- DEFERRED PoC: LifeOS family-consumption facade (synthetic data only).
+
+Per ADR-0007 and the solution-landscape, this is NOT a production identity
+boundary. It uses synthetic data exclusively and must not be exposed to real
+family credentials. The production access path remains owner-only over VPN.
 
 This REPLACES the V8 test surface (scripts/family_view.py), which authenticated
 with a TEST-GRADE persona cookie: anyone who could reach the URL could assume

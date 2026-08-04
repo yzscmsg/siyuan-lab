@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-facade_smoke_test.py -- automated smoke test for the PRODUCTION family facade.
+facade_smoke_test.py -- automated smoke test for the DEFERRED PoC family facade (synthetic data only).
 
 Unlike scripts/v8_smoke_test.py (which assumed a test-grade persona cookie),
 this authenticates with REAL credentials via POST /login and proves:
 
   1. Unauthenticated requests are redirected to /login (no anonymous access).
   2. A valid login yields a signed session cookie; the feed + docs render.
-  3. The schema RLS still holds with authenticated identity:
+  3. The schema authorization boundary still holds with authenticated identity:
        - owner sees household-wide (c01,c02,n06) = 3
        - adult sees those + person-scoped n07 = 4, and CAN open n07
        - member sees those + role-scoped n08 = 4, and CAN open n08

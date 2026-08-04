@@ -70,6 +70,22 @@ docs/adr/          decision records
 docs/implementation/  runbook, RAG seam, scorecard
 ```
 
+## Vendoring (sync from family-lifeos)
+
+Per [ADR-0007](docs/adr/0007-lab-boundary-and-facade-deferral.md) and
+[ADR-0010](../family-lifeos/docs/adr/0010-artifact-centred-operating-model.md),
+`family-lifeos` owns product schemas, migrations and release code. This repo
+does **not** commit copied product code. The lab VM still needs migrations and
+the Ingest API to run, so a sync script copies them on demand:
+
+```bash
+bash scripts/sync_from_family_lifeos.sh /path/to/family-lifeos
+```
+
+This populates `infra/lifeos-migrations/`, `scripts/lifeos_api.py` and
+`scripts/seed_service_token.py`. These paths are `.gitignore`d. Run the sync
+before `run.sh push` / `run.sh deploy` / `run.sh lifeos-pg`.
+
 ## Running S1
 
 `make` is not installed on the Windows operator workstation (Git Bash ships

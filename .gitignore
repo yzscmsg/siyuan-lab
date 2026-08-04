@@ -8,6 +8,15 @@ backups/
 workspace/
 dbprobe/
 
+# ---- vendored from family-lifeos (sync via scripts/sync_from_family_lifeos.sh) ----
+# Per ADR-0007 / ADR-0011, siyuan-lab does not own product migrations or code.
+# These are synced on demand from the canonical family-lifeos repo and must not
+# be committed here. Run `bash scripts/sync_from_family_lifeos.sh` before deploy.
+infra/lifeos-migrations/
+scripts/lifeos_api.py
+scripts/seed_service_token.py
+scripts/ingest_api_test.py
+
 # ---- python ----
 __pycache__/
 *.pyc

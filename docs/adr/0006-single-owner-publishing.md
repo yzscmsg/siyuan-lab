@@ -99,7 +99,7 @@ The granular publishing layer is implemented and contract-tested:
   process touched ONLY `lifeos-pg` — never a SiYuan endpoint, credential, or
   container. Family members consume with zero SiYuan credentials.
 - **Contract result: 10/10 cases pass**, 45 audit events. The thin HTTP facade
-  wrapping `can_consume`/`published_to` — the Week-9+ PoC-3 (identity/RLS) item
+  wrapping `can_consume`/`published_to` — the Week-9+ PoC-3 (identity/authorization) item
   — is now **built** (`scripts/family_facade.py` + migration `0008` real auth);
   the authorization boundary was already schema-enforced and is reused unchanged.
 
@@ -146,7 +146,7 @@ The production facade closes that gap:
   `family-lifeos/db/migrations/0008_auth_accounts.sql`.
 - **`scripts/family_facade.py`**: real `/login` (username/password), a
   stateless HMAC-SHA256-signed session cookie that fixes `person_id`, reuse of
-  `core.can_consume`/`core.published_to` for RLS, audit of logins + consumes,
+  `core.can_consume`/`core.published_to` for the authorization boundary, audit of logins + consumes,
   and zero SiYuan references. stdlib only; fails closed if
   `FAMILY_FACADE_SECRET` is unset.
 - **`scripts/seed_facade_accounts.py`** (lab-only),
@@ -158,7 +158,7 @@ The production facade closes that gap:
 - Design + test matrix: `docs/implementation/06-family-facade.md`.
 
 This replaces the test-grade cookie: a family member can no longer impersonate
-another, and the schema-level RLS (0007) remains the single source of truth for
+another, and the schema-level authorization boundary (0007) remains the single source of truth for
 what each authenticated person may consume.
 
 ## Status of dependent decisions
