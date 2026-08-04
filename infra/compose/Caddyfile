@@ -31,6 +31,21 @@
         }
     }
 
+    # ---- LifeOS Ingest API (optional-tool contract; ADR-0010 / solution-landscape) ----
+    # This is the SANCTIONED write path for optional tools (n8n, later Dify, the
+    # SiYuan export adapter). It is a SEPARATE surface from the SiYuan admin
+    # console and the family facade: the API process runs on the host and
+    # reaches ONLY lifeos-pg, never the SiYuan kernel. Tools present a scoped
+    # service token (migration 0009); they never get a direct core.* write.
+    # Path prefix is preserved (handle, not handle_path) because lifeos_api.py
+    # expects /api/... on its BASE.
+    handle /api* {
+        reverse_proxy 172.18.0.1:6903 {
+            header_up Host {host}
+            header_up X-Real-IP {remote_host}
+        }
+    }
+
     # NOTE: basicauth via `caddy hash-password` is unavailable in this image
     # (returns "Error: EOF" on the PoC host); auth is enforced by the SiYuan
     # lock screen (accessAuthCode) for the UI and the API token (secret store)
