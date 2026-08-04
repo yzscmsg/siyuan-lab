@@ -1,6 +1,6 @@
 # ADR-0005: S1 verdict — trial SiYuan as a single-owner authoring console
 
-- Status: Proposed (ADR candidate — awaiting the objective-8 manual test)
+- Status: Accepted (verdict ADOPT, 2026-08-04 — V8 human mobile test passed 15/15)
 - Date: 2026-08-03
 - Supersedes: nothing (permission re-scoping by ADR-0006)
 - Depends on: ADR-0001 (deployment), ADR-0002 (export seam), ADR-0003
@@ -27,9 +27,11 @@ Full measured evidence: `docs/implementation/03-s1-scorecard.md` and
 
 ## Decision
 
-**Trial SiYuan** for the authoring-workspace slot, scored **68.9/90
-(76.6/100)** with **all five hard gates passing** under the single-owner model
-(ADR-0006), subject to the conditions below.
+**Adopt SiYuan** for the authoring-workspace slot, scored **83.9/90
+(93.2/100)** with **all five hard gates passing** under the single-owner model
+(ADR-0006). The previously-unscored family-UX dimension (V8) was confirmed by
+the 2026-08-04 human mobile test (5/5 real-family tasks, 15/15), closing the
+last open item below.
 
 **SiYuan is the owner's private authoring console. It is not the family
 permission system and is not a system of record.** Family members consume via
@@ -63,9 +65,10 @@ only be positioned as a single-person workbench, not the family permission
 system.* ADR-0006 accepts exactly that positioning and assigns the permission
 slot to LifeOS publishing. With the criteria re-scoped accordingly, HG3 passes
 (edge blocks anonymous access; admin console owner-only reachable) and the
-verdict is `trial` — the score 68.9/90 remains below the 80 needed for `adopt`,
-driven by the unscored family-UX dimension (V8) and the 10-point quality
-dimension that belongs to D1/I1.
+verdict is `adopt` — the 2026-08-04 V8 human run scored the family-UX dimension
+15/15, lifting the score to 83.9/90 (93.2/100), above the 80 needed for
+`adopt`. The 10-point quality dimension remains out of scope for S1 (belongs to
+D1/I1) and is not counted against the verdict.
 
 ## Consequences
 
@@ -92,14 +95,15 @@ dimension that belongs to D1/I1.
   observe DB-level rejection). What remains for the week-4 API layer is the
   thin HTTP facade over these already-constrained tables, plus publishing ACLs.
 
-## Open item that can reopen this decision
+## Closure (2026-08-04)
 
-1. Run V8 — five real family tasks on a real mobile device (human-only,
-   blocks the family-UX 15 points).
-2. Build the LifeOS granular publishing layer (ADR-0006) and prove a family
-   member can consume published items while having no SiYuan access at all.
+1. ~~Run V8 — five real family tasks on a real mobile device~~ — **DONE
+   (2026-08-04): 5/5 tasks pass, 15/15 family-UX, score 83.9/90.**
+2. ~~Build the LifeOS granular publishing layer (ADR-0006)~~ — **DONE
+   (2026-08-03): migration 0007, 10/10 contract, zero SiYuan credential touch.**
 3. Confirm the scorecard weights against the canonical rubric (weights are a
-   reconstruction from the experiment brief).
+   reconstruction from the experiment brief) — **still open**; if the canonical
+   rubric differs, the absolute number may shift but all five hard gates pass
+   and V8 confirms family-UX, so the `adopt` classification is robust.
 
-Until at least V8 is done, this ADR stays `Proposed` and the verdict remains
-`trial`.
+ADR status moved `Proposed` → `Accepted`; verdict `trial` → `adopt`.

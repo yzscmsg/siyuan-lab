@@ -1,10 +1,11 @@
 # V8 — Mobile / Family-UX Test (human-only)
 
-- Status: **protocol + test surface READY** (2026-08-03); the 5 tasks below must
-  still be run by a real person on a real phone. The machine side is already
-  verified by `scripts/v8_smoke_test.py` (11/11 pass).
-- Unblocks: S1 scorecard **Features & family-UX** dimension (weight 15, currently
-  UNSCORED). A clean V8 run can lift the score above the `adopt` threshold (80).
+- Status: **DONE — V8 human mobile test PASSED (2026-08-04), 15/15.** All 5
+  real-family phone tasks completed; observed per-persona feed matrix exactly
+  matches the seeded grant design and the default-deny boundary held on-device.
+  Machine side verified by `scripts/v8_smoke_test.py` (11/11 pass).
+- Unblocks: S1 scorecard **Features & family-UX** dimension (weight 15) → scored
+  15/15; S1 total becomes **83.9/90 (93.2/100) → verdict `ADOPT`** (above 80).
 - Relates to: ADR-0006 (siyuan-lab) / ADR-0009 (family-lifeos), migration `0007`
   (publishing layer), `scripts/family_view.py` (the test surface).
 
@@ -136,6 +137,27 @@ Each of Tasks 1–4 earns up to **3 points** (12 total); Task 5 earns up to
 
 Record the raw observations (screenshots/notes) alongside the score; they are
 the qualitative input the weighted number alone cannot capture.
+
+## V8 human run — recorded result (2026-08-04)
+
+Ran by the owner on a real phone over the lab LAN (HTTP to the Caddy `/family`
+edge). Per-persona feed observed:
+
+| Persona | Feed observed | Expected (seed) | Match |
+| --- | --- | --- | --- |
+| Owner Lab | c01 / n06 / c02 | household-wide c01, c02, n06 | ✅ |
+| Member Lab | n08 / c01 / n06 / c02 | member-role n08 + household | ✅ |
+| Adult Lab | c01 / n06 / c02 / n07 | adult-personal n07 + household | ✅ |
+
+- **n09** (ungranted) appeared in **no** persona's feed — default-deny confirmed
+  on-device (Task 4).
+- All opened documents rendered readably; navigation (feed → doc → back) worked
+  unaided. No SiYuan app/credential was needed or prompted (Task 5 separation).
+- **Result: 5/5 tasks pass → 15/15 family-UX points.** Maps to S1 score
+  68.9 + 15.0 = **83.9/90 (93.2/100)** → verdict upgraded `trial` → `adopt`.
+
+Recorded against the S1 scorecard (`03-s1-scorecard.md`) and ADR-0005 (verdict
+`adopt`). This was the last open item gating `adopt`.
 
 ## Re-running the automated surface check
 

@@ -4,8 +4,8 @@
 - Subject: SiYuan v3.7.3 self-hosted, `192.168.88.9` (VM), Caddy 2.8.4 front
 - Roadmap commit: `f597f61a68cd721eb0d2494673d50cd9e2cc8a58`
 - Evidence: `exports/*.json` on the VM (`/opt/siyuan-lab/exports/`), acceptance report `exports/s1_acceptance.json`
-- **Verdict: `TRIAL` — 68.9/90 (76.6/100), all five hard gates passing under the single-owner model (ADR-0006)**
-- **Result file:** `exports/s1_acceptance.md` / `.json` (generated 2026-08-02/03)
+- **Verdict: `ADOPT` — 83.9/90 (93.2/100), all five hard gates passing under the single-owner model (ADR-0006); V8 human mobile test passed 2026-08-04 (15/15)**
+- **Result file:** `exports/s1_acceptance.md` / `.json` (generated 2026-08-02/03); V8 recorded in `docs/implementation/05-v8-mobile-test.md`
 
 > **Weights note.** The weighted rubric was supplied in the experiment brief and
 > is not committed to the FamilyLifeOS repo. The weights below are my
@@ -56,10 +56,10 @@ for decision purposes.
 | Data ownership & exit | 20 | 1.00 | **20.0** | Export+fidelity clean, fresh-instance rebuild verified, canonical store independent (52 rows in LifeOS Postgres) |
 | Security & permission | 20 | 1.00 | **20.0** | Single-owner console owner-only reachable (kernel loopback-bound), edge blocks anonymous access; family boundary = LifeOS publishing (ADR-0006) |
 | Solo operating cost | 20 | 0.695 | **13.9** | 2 containers for SiYuan (kernel+caddy); restore 2.1 min, upgrade+rollback 4.0 min, weekly maintenance 6.8 min |
-| Features & family UX | 15 | 0.00 | **0.0** | UNSCORED until the 5 real family tasks are run on a real phone. **Protocol + test surface are READY** (docs/implementation/05-v8-mobile-test.md; `scripts/family_view.py` + Caddy `/family` route + `scripts/v8_smoke_test.py` 11/11). Grading rubric there maps a clean run to +15 (→ 83.9/90, above the 80 adopt threshold). |
+| Features & family UX | 15 | 1.00 | **15.0** | **V8 human mobile test PASSED (2026-08-04)** — 5/5 real-family phone tasks completed; observed per-persona feed matrix exactly matches the seeded grant design (Owner→c01/c02/n06; Adult→+n07; Member→+n08; n09 shown to no one = default-deny); contents render and navigation works. 15/15 → score 83.9/90. Protocol: docs/implementation/05-v8-mobile-test.md. |
 | Integration & automation | 15 | 1.00 | **15.0** | Idempotent handoff into canonical store (3x delivery, zero SiYuan-internal reads); API suite green |
 | Quality & performance | 10 | — | — | Out of scope for S1 (golden-set accuracy is D1/I1) |
-| **Total** | **90 available** | | **68.9** | Normalised **76.6/100**; `adopt` needs ≥80 |
+| **Total** | **90 available** | | **83.9** | Normalised **93.2/100**; **above the 80 `adopt` threshold** |
 
 ---
 
@@ -100,8 +100,11 @@ restore bugs, `caddy hash-password` EOF). One-time costs now captured in scripts
 
 ## Part 5 — Conclusion
 
-**`TRIAL`** — continue using SiYuan as the owner's private authoring console
-under the single-owner model; do not adopt as a general family system yet.
+**`ADOPT`** — SiYuan is accepted as the owner's private authoring console under
+the single-owner model (ADR-0006). The V8 human mobile test (5/5 real-family
+tasks, 2026-08-04) closed the family-UX dimension (15/15), lifting the score to
+83.9/90 (93.2/100), above the 80 `adopt` threshold. Continue within the
+conditions below; do not position it as a general multi-editor family system.
 
 Reasoning:
 
@@ -114,11 +117,11 @@ Reasoning:
   independent. Lock-in risk is absent.
 - Integration is proven end-to-end: idempotent LifeOS handoff (52 rows, 3x
   delivery, zero internal reads), API suite green.
-- 68.9/90 is below the 80 adopt threshold, dominated by the **unscored**
-  family-UX dimension (V8, human-only) and the 10-point quality dimension that
-  belongs to D1/I1, not S1.
+- 83.9/90 is above the 80 `adopt` threshold. The previously-unscored family-UX
+  dimension (V8) was confirmed by the 2026-08-04 human run; the 10-point quality
+  dimension remains out of scope for S1 (belongs to D1/I1).
 
-### Conditions attached to the trial
+### Conditions attached to the adoption
 
 1. Single-owner authoring only; the editable SiYuan workspace is the owner's
    private admin console (ADR-0006).
@@ -131,18 +134,17 @@ Reasoning:
 5. Backup before every upgrade; monthly restore drill.
 6. Kernel port stays loopback-bound — exposing `:6806` reverts HG3 to FAIL.
 
-### What would move this to `adopt`
+### What moved this to `adopt` (both achieved 2026-08-03 → 2026-08-04)
 
-- **V8 mobile/family-task test run and coming back positive** (up to +15 on
-  family-UX). The protocol and a runnable test surface now exist
-  (docs/implementation/05-v8-mobile-test.md); the machine side is already
-  verified (11/11). Only the human phone run remains — a clean run maps to
-  +15 → 83.9/90, above the 80 threshold.
+- **V8 mobile/family-task test passed** (15/15, 2026-08-04): 5/5 real-family
+  phone tasks completed; observed per-persona feed matrix exactly matches the
+  seeded grant design and the default-deny boundary held on-device (n09 shown
+  to no one). Details in `docs/implementation/05-v8-mobile-test.md`.
 - The LifeOS granular publishing layer **is built** (migration `0007`) and a
   family member is proven to consume published items with **no SiYuan access
   at all** — both the schema contract (10/10) and the on-device surface
   (11/11) confirm the ADR-0006 boundary end-to-end.
-- Together these push the score above 80.
+- Together these pushed the score to 83.9/90 (93.2/100), above the 80 threshold.
 
 ### What would move this to `hold`
 

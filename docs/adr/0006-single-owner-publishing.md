@@ -79,7 +79,7 @@ members credentials to the authoring tool.
 - The deploy constraint hardens: the kernel port must stay loopback-bound
   (never `0.0.0.0:6806`); any change to expose it reverts HG3 to FAIL.
 
-## Status (2026-08-03): publishing layer BUILT
+## Status (2026-08-04): publishing layer BUILT + V8 human run PASSED
 
 The granular publishing layer is implemented and contract-tested:
 
@@ -116,11 +116,20 @@ make it *runnable*, a minimal read-only family-view surface now exists:
 Only the **human phone run** remains. Identity is test-grade (persona cookie),
 explicitly not production auth — the real facade is Week-9 PoC-3 (identity/RLS).
 
+### V8 human run PASSED (2026-08-04)
+
+The 5 real-family phone tasks were completed on a real device over the lab LAN.
+Observed per-persona feeds matched the seeded grant matrix exactly (Owner →
+household-only; Adult → +n07; Member → +n08; n09 absent for all = default-deny),
+contents rendered and navigation worked unaided, and no SiYuan credential/app
+was needed. This closes the family-UX dimension (15/15) and lifts the S1 score
+to **83.9/90 (93.2/100) → verdict `adopt`** (ADR-0005 updated).
+
 ## Status of dependent decisions
 
 - ADR-0003: superseded in part — the "single-user workbench, never the family
   permission system" cap is retained, but the permission system slot is now
   assigned to LifeOS publishing rather than left empty.
 - ADR-0005: superseded in part — verdict updated from `hold` (HG3 failed) to
-  `trial` under the single-owner model; `adopt` still requires score ≥ 80 and
-  the V8 mobile test.
+  `adopt` under the single-owner model; V8 human mobile test passed 2026-08-04
+  (15/15 family-UX) lifting the score to 83.9/90 (≥80).
