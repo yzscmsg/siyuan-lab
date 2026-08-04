@@ -93,9 +93,10 @@ The granular publishing layer is implemented and contract-tested:
   `lifeos-pg`): consumes from the existing 51-row canonical fixture; asserts the
   process touched ONLY `lifeos-pg` — never a SiYuan endpoint, credential, or
   container. Family members consume with zero SiYuan credentials.
-- **Contract result: 10/10 cases pass**, 45 audit events. Remaining: the thin
-  HTTP facade wrapping `can_consume`/`published_to` is the Week-9+ PoC-3
-  (identity/RLS) item; the authorization boundary is already schema-enforced.
+- **Contract result: 10/10 cases pass**, 45 audit events. The thin HTTP facade
+  wrapping `can_consume`/`published_to` — the Week-9+ PoC-3 (identity/RLS) item
+  — is now **built** (`scripts/family_facade.py` + migration `0008` real auth);
+  the authorization boundary was already schema-enforced and is reused unchanged.
 
 ### V8 mobile test surface (2026-08-03)
 
@@ -113,8 +114,9 @@ make it *runnable*, a minimal read-only family-view surface now exists:
   `docs/implementation/05-v8-mobile-test.md` (clean run maps to +15 →
   83.9/90, above the 80 adopt threshold).
 
-Only the **human phone run** remains. Identity is test-grade (persona cookie),
-explicitly not production auth — the real facade is Week-9 PoC-3 (identity/RLS).
+The human phone run has since **passed** (2026-08-04, +15 → ADOPT). The V8
+viewer's identity was test-grade (persona cookie, explicitly not production
+auth); that gap is now closed by the production facade below.
 
 ### V8 human run PASSED (2026-08-04)
 
@@ -124,6 +126,35 @@ household-only; Adult → +n07; Member → +n08; n09 absent for all = default-de
 contents rendered and navigation worked unaided, and no SiYuan credential/app
 was needed. This closes the family-UX dimension (15/15) and lifts the S1 score
 to **83.9/90 (93.2/100) → verdict `adopt`** (ADR-0005 updated).
+
+### Production family facade — real auth (2026-08-04)
+
+The V8 test surface proved the authorization boundary but authenticated with a
+test-grade persona cookie (anyone reaching the URL could assume any persona).
+The production facade closes that gap:
+
+- **Migration `0008`** (`core.auth_account`): real login accounts bound 1:1 to a
+  `core.person`, PBKDF2-SHA256 password hashes, brute-force lockout
+  (`failed_attempts`/`locked_until`), and per-account revocation via
+  `session_version` (no session table needed). A trigger guards that an account
+  exists only for a current member of an active household. Mirrored to
+  `family-lifeos/db/migrations/0008_auth_accounts.sql`.
+- **`scripts/family_facade.py`**: real `/login` (username/password), a
+  stateless HMAC-SHA256-signed session cookie that fixes `person_id`, reuse of
+  `core.can_consume`/`core.published_to` for RLS, audit of logins + consumes,
+  and zero SiYuan references. stdlib only; fails closed if
+  `FAMILY_FACADE_SECRET` is unset.
+- **`scripts/seed_facade_accounts.py`** (lab-only),
+  **`scripts/facade_smoke_test.py`** (real-auth smoke: login → feeds →
+  grants/denials → **forged-session rejection** → **privilege-escalation
+  denial** → audit → zero-SiYuan), **`host/run_family_facade.sh`**, and the
+  Caddy `/family` route now targets `:6902` (the facade; the V8 viewer `:6901`
+  is retired as the edge target).
+- Design + test matrix: `docs/implementation/06-family-facade.md`.
+
+This replaces the test-grade cookie: a family member can no longer impersonate
+another, and the schema-level RLS (0007) remains the single source of truth for
+what each authenticated person may consume.
 
 ## Status of dependent decisions
 

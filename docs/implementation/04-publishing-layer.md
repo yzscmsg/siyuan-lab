@@ -67,5 +67,9 @@ comment.
 ## Carry-forward
 
 The thin **HTTP facade** (API/Web) that wraps `can_consume`/`published_to` into a
-family consumption endpoint is the Week-9+ PoC-3 (identity/RLS) deliverable. The
-authorization boundary itself is already schema-enforced and proven here.
+family consumption endpoint — the Week-9+ PoC-3 (identity/RLS) deliverable — is
+now **built**: `scripts/family_facade.py` adds real authentication
+(`core.auth_account`, migration `0008`) on top of this authorization boundary,
+replacing the V8 test surface's test-grade persona cookie. Design + test matrix:
+`docs/implementation/06-family-facade.md`. The authorization boundary itself was
+always schema-enforced and proven here; the facade reuses it unchanged.
