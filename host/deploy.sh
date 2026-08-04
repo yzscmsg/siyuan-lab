@@ -34,7 +34,7 @@ docker run -d --name siyuan-poc --restart unless-stopped --network "$NET" \
 # --- Caddy: tls internal (basicauth omitted — see Caddyfile note) ---
 docker rm -f siyuan-caddy 2>/dev/null || true
 docker run -d --name siyuan-caddy --restart unless-stopped --network "$NET" \
-  -e SITE_ADDRESS=192.168.88.9 \
+  -e SITE_ADDRESS="${SITE_ADDRESS:-siyuan.lan}" \
   --add-host host.docker.internal:host-gateway \
   -p 80:80 -p 443:443 \
   -v "$BASE/infra/compose/Caddyfile":/etc/caddy/Caddyfile:ro \
