@@ -8,11 +8,31 @@ deployment. It exists to answer one question:
 > Is SiYuan worth adopting for the "authoring workspace" capability slot, and
 > can we get our data back out if the answer later becomes no?
 
-**Verdict: `TRIAL` (score 75/100, all five hard gates passed).**
-Capped by one finding: self-hosted SiYuan has **no per-user ACL**, so it can be a
-single-person workbench but never the family permission system.
+**Verdict: `ADOPT` for the optional single-owner authoring-workspace slot
+(83.9/90 assessed points; all five SiYuan hard gates passed).** The separately
+reported 93.2% is only a normalization over the 90 assessed points and must not
+be read as 93.2/100 coverage of the wider LifeOS architecture or security.
+
+Self-hosted SiYuan still has **no per-user ACL**. It can be a private
+single-owner workbench, but it is never the family permission system or an
+authoritative record store.
 See [docs/implementation/03-s1-scorecard.md](docs/implementation/03-s1-scorecard.md)
 and [ADR-0005](docs/adr/0005-s1-verdict.md).
+
+## Current experiment boundary
+
+This repository owns SiYuan deployment experiments, adapters and measured
+evidence only. `family-lifeos` owns product schemas, migrations, authorization,
+Evidence/Artifact contracts and release logic.
+
+The custom family facade is retained as a **non-production authentication PoC
+using synthetic data**. It has known blocking defects and is not an accepted
+identity or real-family-data boundary. V1 remains owner-only over VPN. See
+[ADR-0007](docs/adr/0007-lab-boundary-and-facade-deferral.md) and
+[the facade warning](docs/implementation/06-family-facade.md).
+
+The active scope, evidence rules and exit criteria are in the
+[S1 experiment charter](docs/EXPERIMENT-CHARTER.md).
 
 ## Capability slot boundary
 
@@ -94,9 +114,10 @@ Ops helpers: `./run.sh status`, `./run.sh logs`, `./run.sh smoke`.
 | Upgrade → rollback | v3.7.3 → v3.7.2 → v3.7.3, no data loss |
 | Secret leakage into notes/logs | none found |
 
-The one thing S1 could not do for you: **objective 8's subjective test** (five real
-family tasks on a real phone). That needs a human. See the runbook's
-[open item](docs/implementation/01-s1-runbook.md#10-open-item--manual-step).
+Objective 8's five representative phone tasks were subsequently completed by a
+human and passed 15/15. That result validates the tested SiYuan authoring and
+read-only experiment experience; it does not certify the custom facade or the
+wider LifeOS security architecture for production use.
 
 ## Exit path
 

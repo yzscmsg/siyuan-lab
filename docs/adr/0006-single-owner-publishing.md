@@ -1,5 +1,10 @@
 # ADR-0006: Single-owner LifeOS with granular publishing; SiYuan = private admin console
 
+> **Superseded in part by ADR-0007 (2026-08-04).** The single-owner SiYuan
+> authoring boundary remains accepted. The custom family facade is not
+> production-ready; it is retained only as a synthetic-data PoC pending product
+> ownership cleanup and security repair in `family-lifeos`.
+
 - Status: Accepted
 - Date: 2026-08-03
 - Supersedes: part of ADR-0003 (permission model) and ADR-0005 (S1 verdict) —

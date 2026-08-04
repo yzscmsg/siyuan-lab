@@ -1,10 +1,40 @@
 # LifeOS family-consumption facade — real authentication (PoC-3)
 
-- Status: built (2026-08-04)
+- Status: **experimental; synthetic data only; not production-approved**
+- Built: 2026-08-04
 - Relates to: ADR-0006 (siyuan-lab) / ADR-0009 (family-lifeos), migration
   `0007` (publishing/authz boundary), migration `0008` (auth accounts),
   `scripts/family_facade.py`, roadmap §下一轮, supersedes the V8 test surface
   (`scripts/family_view.py`).
+
+> **Safety notice:** ADR-0007 and `family-lifeos` ADR-0010 defer this custom
+> facade. Do not expose it as a real-family-data service. V1 remains owner-only
+> over VPN. The code is retained temporarily as PoC evidence and test material.
+
+## Blocking findings from architecture review
+
+The PoC must not be promoted without resolving and independently reviewing at
+least the following:
+
+1. The login path ends the redirect response before attempting to add the
+   `Set-Cookie` header; correct session issuance is not established.
+2. The session cookie uses `Path=/`, so it is sent beyond the `/family` surface
+   on the shared origin.
+3. The process listens on all interfaces and the documented direct HTTP route
+   can bypass TLS and the intended edge boundary.
+4. Document metadata is loaded before authorization denial, allowing title or
+   existence information to cross the access boundary.
+5. Database access shells into the PostgreSQL container rather than using a
+   least-privilege application role and supported driver/API boundary.
+6. Account lifecycle, person uniqueness, password work factor, lockout
+   atomicity, security headers, path containment and session lifecycle require
+   further design and testing.
+7. Product migrations and identity logic belong in `family-lifeos`, not this
+   lab repository.
+
+Passing the existing smoke test does not close these findings because the test
+oracle and implementation were produced together and several production
+controls are outside its scope.
 
 ## Why this exists
 
@@ -102,8 +132,9 @@ calls and asserts:
 7. Audit events (`family.login` + `family.consume`) are present.
 8. The facade source contains zero SiYuan kernel/token references.
 
-This is the production analogue of `v8_smoke_test.py`: same boundary proof,
-real identity, plus an explicit impersonation-resistance check.
+This is an identity-layer experiment corresponding to `v8_smoke_test.py`: it
+adds username/password and impersonation-resistance checks but is not a
+production security certification.
 
 ## Hardening notes (production TODO, not done here)
 

@@ -4,7 +4,8 @@
 - Subject: SiYuan v3.7.3 self-hosted, `192.168.88.9` (VM), Caddy 2.8.4 front
 - Roadmap commit: `f597f61a68cd721eb0d2494673d50cd9e2cc8a58`
 - Evidence: `exports/*.json` on the VM (`/opt/siyuan-lab/exports/`), acceptance report `exports/s1_acceptance.json`
-- **Verdict: `ADOPT` — 83.9/90 (93.2/100), all five hard gates passing under the single-owner model (ADR-0006); V8 human mobile test passed 2026-08-04 (15/15)**
+- **Verdict: `ADOPT` for the optional SiYuan single-owner authoring slot — 83.9/90 assessed points; all five SiYuan hard gates passed under ADR-0006; V8 human mobile test passed 2026-08-04 (15/15).**
+- **Score interpretation:** 93.2% is a normalization over the 90 assessed points, not 93.2/100 coverage of the wider LifeOS product, identity or security architecture. ADR-0007 separately defers the custom facade.
 - **Result file:** `exports/s1_acceptance.md` / `.json` (generated 2026-08-02/03); V8 recorded in `docs/implementation/05-v8-mobile-test.md`
 
 > **Weights note.** The weighted rubric was supplied in the experiment brief and
@@ -59,7 +60,7 @@ for decision purposes.
 | Features & family UX | 15 | 1.00 | **15.0** | **V8 human mobile test PASSED (2026-08-04)** — 5/5 real-family phone tasks completed; observed per-persona feed matrix exactly matches the seeded grant design (Owner→c01/c02/n06; Adult→+n07; Member→+n08; n09 shown to no one = default-deny); contents render and navigation works. 15/15 → score 83.9/90. Protocol: docs/implementation/05-v8-mobile-test.md. |
 | Integration & automation | 15 | 1.00 | **15.0** | Idempotent handoff into canonical store (3x delivery, zero SiYuan-internal reads); API suite green |
 | Quality & performance | 10 | — | — | Out of scope for S1 (golden-set accuracy is D1/I1) |
-| **Total** | **90 available** | | **83.9** | Normalised **93.2/100**; **above the 80 `adopt` threshold** |
+| **Total** | **90 assessed** | | **83.9** | **93.2% of the 90 assessed points**; 10 wider-product points were not assessed here; above the experiment's 80-point `adopt` threshold |
 
 ---
 
@@ -103,7 +104,7 @@ restore bugs, `caddy hash-password` EOF). One-time costs now captured in scripts
 **`ADOPT`** — SiYuan is accepted as the owner's private authoring console under
 the single-owner model (ADR-0006). The V8 human mobile test (5/5 real-family
 tasks, 2026-08-04) closed the family-UX dimension (15/15), lifting the score to
-83.9/90 (93.2/100), above the 80 `adopt` threshold. Continue within the
+83.9/90 assessed points, above the experiment's 80-point `adopt` threshold. Continue within the
 conditions below; do not position it as a general multi-editor family system.
 
 Reasoning:
@@ -144,7 +145,7 @@ Reasoning:
   family member is proven to consume published items with **no SiYuan access
   at all** — both the schema contract (10/10) and the on-device surface
   (11/11) confirm the ADR-0006 boundary end-to-end.
-- Together these pushed the score to 83.9/90 (93.2/100), above the 80 threshold.
+- Together these pushed the score to 83.9/90 assessed points, above the experiment's 80-point threshold.
 
 ### What would move this to `hold`
 
