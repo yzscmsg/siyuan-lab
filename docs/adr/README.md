@@ -15,11 +15,17 @@ Status values: `Proposed`, `Accepted`, `Superseded`, `Rejected`.
 | [0004](0004-backup-and-rollback.md) | Backup, restore and rollback for the SiYuan workbench | Accepted |
 | [0005](0005-s1-verdict.md) | S1 verdict — adopt SiYuan on trial as a single-user workbench | **Proposed** (partially superseded by 0006) |
 | [0006](0006-single-owner-publishing.md) | Single-owner LifeOS; SiYuan = private admin console, consumption via LifeOS granular publishing | Accepted |
+| [0007](0007-lab-boundary-and-facade-deferral.md) | SiYuan lab boundary; custom family facade deferred as a synthetic-data PoC | Accepted |
 
 ADR-0005 is the ADR candidate required by the S1 protocol. It remains `Proposed`
 until the objective-8 manual test (five real family tasks on a mobile device) is
 performed. ADR-0006 re-scopes its permission findings: the family boundary moves
 from SiYuan (which has none) to LifeOS granular publishing.
+
+The manual task was later completed. ADR-0007 records the current parent
+architecture: SiYuan is adopted only as an optional single-owner authoring
+workspace, while the custom family facade is deferred and remains a
+synthetic-data PoC.
 
 ## Relationship to the FamilyLifeOS ADRs
 

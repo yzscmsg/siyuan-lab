@@ -27,8 +27,8 @@ Full measured evidence: `docs/implementation/03-s1-scorecard.md` and
 
 ## Decision
 
-**Adopt SiYuan** for the authoring-workspace slot, scored **83.9/90
-(93.2/100)** with **all five hard gates passing** under the single-owner model
+**Adopt SiYuan** for the authoring-workspace slot, scored **83.9/90 assessed
+points** with **all five hard gates passing** under the single-owner model
 (ADR-0006). The previously-unscored family-UX dimension (V8) was confirmed by
 the 2026-08-04 human mobile test (5/5 real-family tasks, 15/15), closing the
 last open item below.
@@ -66,7 +66,7 @@ system.* ADR-0006 accepts exactly that positioning and assigns the permission
 slot to LifeOS publishing. With the criteria re-scoped accordingly, HG3 passes
 (edge blocks anonymous access; admin console owner-only reachable) and the
 verdict is `adopt` — the 2026-08-04 V8 human run scored the family-UX dimension
-15/15, lifting the score to 83.9/90 (93.2/100), above the 80 needed for
+15/15, lifting the score to 83.9/90 assessed points, above the experiment's 80 needed for
 `adopt`. The 10-point quality dimension remains out of scope for S1 (belongs to
 D1/I1) and is not counted against the verdict.
 
