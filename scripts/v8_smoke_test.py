@@ -1,5 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# =====================================================================
+# TEST SCRIPT METADATA  (format: docs/testing/README.md)
+#   gate:      V8 (automated pre-check) - family viewing surface + ADR-0006 boundary
+#   goal:      validate the MACHINE side of V8: surface works, boundary holds via Caddy
+#   inputs:    Caddy edge reachable (default https://127.0.0.1/family); seeded grants
+#   expected:  11/11 - per-persona feeds match seed; n09 default-deny; audit present
+#   deps:      stack deployed; seed_v8_grants.sql applied; lifeos-pg up
+#   run:       python3 scripts/v8_smoke_test.py [--base https://127.0.0.1/family]
+#   issues:    HUMAN phone run (5 tasks) is REQUIRED and lives in 05-v8-mobile-test.md;
+#              this script cannot replace it. Persona cookie is TEST-GRADE, not auth.
+# =====================================================================
 """
 v8_smoke_test.py -- automated smoke test for the V8 family-view surface.
 

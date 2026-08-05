@@ -1,5 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# =====================================================================
+# TEST SCRIPT METADATA  (format: docs/testing/README.md)
+#   gate:      NONE - this is the DEFERRED PoC facade (ADR-0007), synthetic data only
+#   goal:      prove real-auth login + signed session + schema boundary with identity
+#   inputs:    running family_facade.py (:6902); lab accounts from seed_facade_accounts.py
+#   expected:  anon -> /login redirect; valid login -> signed cookie + feed; forged
+#              session rejected; privilege-escalation (member opens owner doc) denied
+#   deps:      core.auth_account (migration 0008); FAMILY_FACADE_SECRET set
+#   run:       python3 scripts/facade_smoke_test.py [--base http://127.0.0.1:6902]
+#   issues:    DEFERRED PoC - NOT a production identity/real-data boundary. Do NOT feed
+#              it real family data. See ADR-0007. Zero SiYuan reference by construction.
+# =====================================================================
 """
 facade_smoke_test.py -- automated smoke test for the DEFERRED PoC family facade (synthetic data only).
 

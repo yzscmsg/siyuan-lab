@@ -1,3 +1,15 @@
+# =====================================================================
+# TEST SCRIPT METADATA  (format: docs/testing/README.md)
+#   gate:      Publishing layer contract (ADR-0006/0009) - backs HG3/HG5 boundary
+#   goal:      prove per-item/per-person read ACL + default-deny + owner-only publish
+#   inputs:    live lifeos-pg with migrations 0006/0007; the 51-row S1 handoff fixture
+#   expected:  10/10 cases pass; grants enforce allow/deny; ungranted = default-deny;
+#              publish is owner-only (trigger guard); 45 audit events emitted
+#   deps:      core.publish_grant / core.can_consume / core.published_to + owner guard
+#   run:       python3 scripts/lifeos_publish.py   (lab VM, lifeos-pg only, zero SiYuan)
+#   issues:    CONSUMES from canonical only - never touches SiYuan. This is the proof
+#              the family boundary lives in LifeOS, not the authoring tool.
+# =====================================================================
 """LifeOS granular publishing layer — contract + boundary test (ADR-0006/0009).
 
 Roadmap requirement (family-lifeos §下一轮, after D3/D4 closed):

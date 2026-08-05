@@ -1,3 +1,17 @@
+# =====================================================================
+# TEST SCRIPT METADATA  (format: docs/testing/README.md)
+#   gate:      HG3 - unauthorised users/logs/models/indexes see no forbidden fields
+#   goal:      probe 7 surfaces for unauthenticated access + secret leakage
+#   inputs:    running SiYuan+Caddy stack; NO credentials (unauth probes)
+#   expected:  N1/N2/N4 -> 401; N3 proxy blocks anon /assets + kernel loopback-only;
+#              N5 owner-only console; N6/N7 no token leakage in logs/backups/content
+#   deps:      stack deployed (./run.sh deploy); HG1 export path understood
+#   run:       python3 scripts/negative_tests.py
+#              (or: python3 scripts/s1_acceptance.py --stages negative)
+#   issues:    ORIGINAL multi-user-isolation reading FAILED (SiYuan has no per-user
+#              ACL); ADR-0006 re-scoped HG3 to single-owner + LifeOS publishing -> PASS.
+#              Any change exposing :6806 to LAN reverts HG3 to FAIL.
+# =====================================================================
 """S1 step 12: permission negative tests + secret-leakage audit.
 
 Roadmap requirement

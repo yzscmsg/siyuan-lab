@@ -1,3 +1,16 @@
+# =====================================================================
+# TEST SCRIPT METADATA  (format: docs/testing/README.md)
+#   gate:      HG1 (export portion) - open-format export + rebuild, no manual DB repair
+#   goal:      export all live docs to Markdown+assets; verify asset hashes + fidelity
+#   inputs:    running SiYuan workspace; corpus/ originals for comparison
+#   expected:  30/30 docs with content; 22/22 asset hashes match; fidelity 30/30
+#              structural, 100% word retention; zero manual DB repair to recover
+#   deps:      ./run.sh deploy + seed; corpus/ present
+#   run:       python3 scripts/export_md.py   (then ./run.sh fidelity)
+#              (or: python3 scripts/s1_acceptance.py --stages export,fidelity)
+#   issues:    createDocWithMd is NOT idempotent (handled by handoff idempotency,
+#              not a gate failure). Export is the durable exit path (also HG5).
+# =====================================================================
 """S1 export: standard Markdown + assets, plus round-trip fidelity verification.
 
 Builds /opt/siyuan-lab/exports/markdown/<notebook>/<hpath>.md + assets/ (the

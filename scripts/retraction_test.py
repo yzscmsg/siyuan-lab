@@ -1,3 +1,16 @@
+# =====================================================================
+# TEST SCRIPT METADATA  (format: docs/testing/README.md)
+#   gate:      HG4 - deletion/retraction propagates; no user-invisible AI-retrievable copy
+#   goal:      delete a real doc and chase the deletion through 5 retention layers
+#   inputs:    running SiYuan workspace + lifeos-pg; a target doc id (DESTRUCTIVE: deletes)
+#   expected:  absent in L1 SiYuan index, L2 filesystem, L3 export, L4 LifeOS canonical,
+#              L5 orphan assets; hard_gate_4_pass = true in exports/retraction_report.json
+#   deps:      HG1 export (L3); HG5 canonical store (L4); lifeos-pg up
+#   run:       python3 scripts/retraction_test.py
+#              (or: python3 scripts/s1_acceptance.py --stages retraction)
+#   issues:    export previously left placeholders + orphaned assets; both fixed after
+#              this gate caught them. Derived (Dify RAG) layer is rebuildable from canonical.
+# =====================================================================
 """Hard gate 4: deletion / retraction must propagate.
 
   "删除/撤回能传播；不会留下用户不可见但 AI 仍可检索的副本。"
