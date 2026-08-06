@@ -1,61 +1,30 @@
 # SiYuan PoC Caddy - TLS (internal CA) + basicauth in front of the kernel.
 # The kernel (siyuan:6806) is NOT published to the LAN; all traffic goes through here.
 #
+# SCOPE (ADR-0012 section 7): this file serves the SiYuan kernel and nothing else.
+# It is a lab edge, not the product edge.
+#
+# Removed 2026-08-06 per ADR-0012 section 2 (reconciliation inconsistency 10):
+#   handle_path /family*  -> 172.18.0.1:6902  (family_facade.py)
+#   handle      /api*     -> 172.18.0.1:6903  (lifeos_api.py, the Ingest API)
+# Both published a family-lifeos product surface from an experiment repo. The
+# /api route now lives in family-lifeos/infra/compose/Caddyfile; the facade moved
+# to family-lifeos/scripts/experimental/ and is run directly, not proxied here.
+#
 # Known limitation (Caddy 2.8): the internal cert is only served to clients that
 # send the IP as SNI. Most browsers do; curl/python/PowerShell on Windows against
-# a raw IP do not. For automation and V8 smoke tests, use the plain-HTTP viewer
-# on :6901 instead. (ADR-0009: viewer talks only to lifeos-pg, never the kernel.)
+# a raw IP do not. For automation, hit the kernel through a client that sets SNI
+# or use --insecure/--resolve in tests.
 
 {$SITE_ADDRESS:192.168.88.9} {
     tls internal
 
-    # ---- DEFERRED PoC family consumption surface (ADR-0007 / ADR-0009) ----
-    # SYNTHETIC DATA ONLY -- not a production identity boundary.
-    # Family members sign in (real auth, migration 0008) and consume
-    # LifeOS-published content here. It is a SEPARATE surface from the SiYuan
-    # admin console below: the facade process runs on the host and reaches ONLY
-    # lifeos-pg, never the SiYuan kernel. The facade replaces the V8 test
-    # surface (which used a test-grade persona cookie) -- identity is now a
-    # signed session bound to a core.auth_account, so impersonation is
-    # impossible by construction.
-    #
-    # Host-side processes:
-    #   - 0.0.0.0:6902  family_facade.py  (DEFERRED PoC, synthetic data)  <- /family
-    #   - 0.0.0.0:6901  family_view.py    (V8 test surface, legacy, retired)
-    # 172.18.0.1 is the siyuan_net bridge gateway (the host as seen from the
-    # container). deploy.sh also adds --add-host host.docker.internal:host-gateway
-    # so either name works.
-    handle_path /family* {
-        reverse_proxy 172.18.0.1:6902 {
-            header_up Host {host}
-            header_up X-Real-IP {remote_host}
-        }
-    }
-
-    # ---- LifeOS Ingest API (optional-tool contract; ADR-0010 / solution-landscape) ----
-    # This is the SANCTIONED write path for optional tools (n8n, later Dify, the
-    # SiYuan export adapter). It is a SEPARATE surface from the SiYuan admin
-    # console and the family facade: the API process runs on the host and
-    # reaches ONLY lifeos-pg, never the SiYuan kernel. Tools present a scoped
-    # service token (migration 0009); they never get a direct core.* write.
-    # Path prefix is preserved (handle, not handle_path) because lifeos_api.py
-    # expects /api/... on its BASE.
-    handle /api* {
-        reverse_proxy 172.18.0.1:6903 {
-            header_up Host {host}
-            header_up X-Real-IP {remote_host}
-        }
-    }
-
     # NOTE: basicauth via `caddy hash-password` is unavailable in this image
     # (returns "Error: EOF" on the PoC host); auth is enforced by the SiYuan
-    # lock screen (accessAuthCode) for the UI and the API token (secret store)
-    # for /api/* calls. Re-enable basicauth in production once a hash can be
-    # generated (see docs/adr/0001).
-    handle {
-        reverse_proxy siyuan:6806 {
-            header_up Host {host}
-            header_up X-Real-IP {remote_host}
-        }
+    # lock screen (accessAuthCode). Re-enable basicauth in production once a
+    # hash can be generated (see docs/adr/0001).
+    reverse_proxy siyuan:6806 {
+        header_up Host {host}
+        header_up X-Real-IP {remote_host}
     }
 }
