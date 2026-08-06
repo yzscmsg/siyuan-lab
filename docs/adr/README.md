@@ -36,5 +36,5 @@ inherit from, and must stay consistent with, the parent decisions:
   reason Phase-0.5-sensitive material is kept out of SiYuan entirely.
 - FamilyLifeOS **ADR-0005** (layered backup and restore testing) — the source of
   the rule that a backup is not successful until automated checks pass.
-- FamilyLifeOS **ADR-004 isolation** — an organisational boundary is never a
+- **RK-004 isolation** (rag-lab-kit; not family-lifeos ADR-0004) — an organisational boundary is never a
   security boundary; separate instances, DBs and ACLs per boundary.

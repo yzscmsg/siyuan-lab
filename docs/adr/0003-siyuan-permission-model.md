@@ -39,7 +39,7 @@ token in plaintext.
    place material in SiYuan that some family member must not see.
 3. **Any real isolation is enforced outside SiYuan** by exactly one of:
    - a **separate instance** per person or boundary (containers, volumes, tokens
-     and NAS ACLs all separate) — consistent with FamilyLifeOS **ADR-004**
+     and NAS ACLs all separate) — consistent with **RK-004** (rag-lab-kit instance isolation)
      isolation, where an organisational boundary is never treated as a security
      boundary; or
    - an **authenticating gateway** that terminates the user session, enforces the

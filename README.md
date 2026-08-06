@@ -72,19 +72,37 @@ docs/implementation/  runbook, RAG seam, scorecard
 
 ## Vendoring (sync from family-lifeos)
 
-Per [ADR-0007](docs/adr/0007-lab-boundary-and-facade-deferral.md) and
-[ADR-0010](../family-lifeos/docs/adr/0010-artifact-centred-operating-model.md),
+Per [ADR-0007](docs/adr/0007-lab-boundary-and-facade-deferral.md) (cited
+cross-repo as **SL-0007**),
+[ADR-0010](../family-lifeos/docs/adr/0010-artifact-centred-operating-model.md)
+and
+[ADR-0012 §2](../family-lifeos/docs/adr/0012-cross-repo-contract-and-boundaries.md),
 `family-lifeos` owns product schemas, migrations and release code. This repo
-does **not** commit copied product code. The lab VM still needs migrations and
-the Ingest API to run, so a sync script copies them on demand:
+does **not** commit copied product code. The lab VM still needs them to run, so
+a sync script copies them on demand:
 
 ```bash
 bash scripts/sync_from_family_lifeos.sh /path/to/family-lifeos
 ```
 
-This populates `infra/lifeos-migrations/`, `scripts/lifeos_api.py` and
-`scripts/seed_service_token.py`. These paths are `.gitignore`d. Run the sync
-before `run.sh push` / `run.sh deploy` / `run.sh lifeos-pg`.
+This populates, all `.gitignore`d:
+
+| Path | Source in family-lifeos |
+|---|---|
+| `infra/lifeos-migrations/` | `db/migrations/` |
+| `scripts/lifeos_api.py` | `scripts/lifeos_api.py` |
+| `scripts/seed_service_token.py` | `scripts/seed_service_token.py` |
+| `scripts/ingest_api_test.py` | `tests/test_ingest_api_contract.py` |
+| `scripts/lifeos_handoff.py` | `tests/contract/lifeos_handoff.py` |
+| `scripts/family_view.py` | `scripts/experimental/family_view.py` |
+| `scripts/seed_v8_grants.sql` | `scripts/experimental/seed_v8_grants.sql` |
+
+The last three moved out of this repository on 2026-08-06 (ADR-0012 §2) and are
+synced back only because retained lab evidence executes them. **Edit them in
+`family-lifeos`; a local edit here is silently overwritten by the next sync.**
+
+Run the sync before `run.sh push` / `run.sh deploy` / `run.sh lifeos-pg`. It
+fails loudly if a source file is missing, rather than leaving a stale copy.
 
 ## Running S1
 

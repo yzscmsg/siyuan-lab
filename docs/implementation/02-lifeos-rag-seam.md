@@ -2,7 +2,7 @@
 
 - Status: designed and validated on the SiYuan side; LifeOS/n8n side not yet built
 - Relates to: ADR-0002 (export is the only seam), ADR-0003 (permission model),
-  FamilyLifeOS ADR-004 (instance isolation), `rag-lab-kit` (Dify + n8n lab)
+  RK-004 (rag-lab-kit instance isolation), `rag-lab-kit` (Dify + n8n lab)
 
 ## The shape
 
@@ -45,7 +45,7 @@ a surface you type into, Dify is an index you can throw away and rebuild.
    Dropping the vector store must never lose information.
 4. **ACL is evaluated in LifeOS, before n8n hands anything to Dify.** SiYuan
    cannot enforce it (ADR-0003), so the gate lives upstream of the AI layer.
-5. **Isolation per ADR-004.** The family instance and any KZ/Track-B instance get
+5. **Isolation per RK-004.** The family instance and any KZ/Track-B instance get
    separate n8n and Dify deployments — separate containers, separate PostgreSQL
    DB and user, separate NAS ACLs. Shared hardware is fine; a shared install with
    only workspace segregation is not.
