@@ -23,6 +23,7 @@ Run on the VM (or any host that can reach the Caddy edge):
     python3 scripts/v8_smoke_test.py [--base https://127.0.0.1/family]
 """
 
+import os
 import sys
 import ssl
 import json
@@ -181,9 +182,27 @@ check("audit_trail_present", audit_n > 0, "family.consume events=%s" % audit_n)
 #    exclude that and target only real kernel references). We strip the module
 #    docstring and # comments so documentation prose ("NEVER references :6806")
 #    is not mistaken for a real reference.
-raw = subprocess.run(
-    ["cat", "/opt/siyuan-lab/scripts/family_view.py"],
-    capture_output=True, text=True).stdout
+#
+#    SOURCE LOCATION (ADR-0012 section 1): family_view.py is owned by
+#    family-lifeos (scripts/experimental/) and synced into this repo's
+#    scripts/ dir as a gitignored artifact. Resolve it next to this file rather
+#    than hardcoding /opt/siyuan-lab, and FAIL LOUDLY if it is absent -- the
+#    previous `cat` returned empty stdout on a missing file, which made this
+#    boundary check pass vacuously (no source => no forbidden tokens => green).
+_FAMILY_VIEW_SRC = os.environ.get(
+    "FAMILY_VIEW_SRC",
+    os.path.join(os.path.dirname(os.path.abspath(__file__)), "family_view.py"))
+if not os.path.isfile(_FAMILY_VIEW_SRC):
+    raise SystemExit(
+        "FATAL: cannot audit the family surface -- %s not found.\n"
+        "It is a synced artifact; run:\n"
+        "  bash scripts/sync_from_family_lifeos.sh /path/to/family-lifeos\n"
+        "or set FAMILY_VIEW_SRC to its location." % _FAMILY_VIEW_SRC)
+with open(_FAMILY_VIEW_SRC, "r", encoding="utf-8") as _fh:
+    raw = _fh.read()
+if not raw.strip():
+    raise SystemExit("FATAL: %s is empty; boundary audit cannot run."
+                     % _FAMILY_VIEW_SRC)
 # drop the module docstring + # comments so documentation prose
 # ("NEVER references :6806") is not mistaken for a real reference
 code_lines = []
