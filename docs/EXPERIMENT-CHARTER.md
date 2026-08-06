@@ -50,12 +50,56 @@ LifeOS migrations into this repository.
 
 ## Current work
 
-1. Keep the facade visibly labelled and isolated as a synthetic-data PoC.
-2. Remove copied product migrations/code in the repository-boundary change.
-3. Point adapters/tests at a pinned LifeOS contract or local integration
-   checkout.
+1. ~~Keep the facade visibly labelled and isolated as a synthetic-data PoC.~~
+   **Done 2026-08-06 (ADR-0012 §2).** The facade left this repository entirely:
+   `family_facade.py`, `seed_facade_accounts.py` and `facade_smoke_test.py` now
+   live in `family-lifeos` (`scripts/experimental/`, `tests/contract/`), the
+   `/family*` Caddy route and `host/run_family_facade.sh` are deleted, and the
+   destination directory is labelled *DEFERRED PoC — synthetic data only*.
+2. ~~Remove copied product migrations/code in the repository-boundary change.~~
+   **Done 2026-08-06 (ADR-0012 §2).** 2,570 lines of product-schema code stopped
+   being owned here. See "Boundary status" below.
+3. ~~Point adapters/tests at a pinned LifeOS contract or local integration
+   checkout.~~ **Done 2026-08-06.** `scripts/sync_from_family_lifeos.sh` is the
+   only path by which product code enters this working tree, and everything it
+   writes is `.gitignore`d.
 4. Retain the export, rebuild, restore, upgrade and maintenance evidence.
 5. Reassess SiYuan after the Health artifact pilot using measured owner effort.
+
+## Boundary status (2026-08-06)
+
+The cross-repo audit found ~2,570 lines here that read and wrote `core.*` and
+`audit.*` — a Principle 11 violation, since this repository is an experiment lab,
+not a product owner. ADR-0012 §2 resolved it.
+
+**No longer owned here** (canonical home is now `family-lifeos`):
+
+| Was | Now | Synced back? |
+|---|---|---|
+| `scripts/lifeos_handoff.py` | `tests/contract/lifeos_handoff.py` | Yes — gitignored |
+| `scripts/family_view.py` | `scripts/experimental/family_view.py` | Yes — gitignored |
+| `scripts/seed_v8_grants.sql` | `scripts/experimental/seed_v8_grants.sql` | Yes — gitignored |
+| `scripts/lifeos_publish.py` | `tests/contract/lifeos_publish.py` | No |
+| `scripts/facade_smoke_test.py` | `tests/contract/facade_smoke_test.py` | No |
+| `scripts/family_facade.py` | `scripts/experimental/family_facade.py` | No |
+| `scripts/seed_facade_accounts.py` | `scripts/experimental/seed_facade_accounts.py` | No |
+
+**Deleted:** `host/run_family_facade.sh`, `host/run_lifeos_api.sh`, and the
+`/family*` + `/api*` routes in `infra/compose/Caddyfile`. The Ingest API edge is
+now `family-lifeos/infra/compose/Caddyfile`.
+
+**Retained under the ADR-0012 §1 read-mostly exception** — lab evidence that
+reads `core.*` to prove a SiYuan-side property: `scripts/retraction_test.py`
+(HG4 retraction propagation), `scripts/s1_acceptance.py` (S1 acceptance),
+`scripts/v8_smoke_test.py` (V8 smoke). `host/lifeos_pg.sh` is also retained: it
+applies *synced, gitignored* migrations, which is the sanctioned pattern, not a
+vendored schema copy.
+
+The three sync-back entries exist because retained evidence executes them —
+`s1_acceptance.py`, `retraction_test.py`, `run.sh handoff` and `host/escrow.sh`
+run `lifeos_handoff.py`; `v8_smoke_test.py` audits `family_view.py`'s source and
+uses the `seed_v8_grants.sql` fixture. A gitignored synced copy is not ownership;
+it is the same mechanism already used for migrations and `lifeos_api.py`.
 
 ## AI and human roles
 

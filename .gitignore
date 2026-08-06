@@ -9,13 +9,26 @@ workspace/
 dbprobe/
 
 # ---- vendored from family-lifeos (sync via scripts/sync_from_family_lifeos.sh) ----
-# Per ADR-0007 / ADR-0011, siyuan-lab does not own product migrations or code.
-# These are synced on demand from the canonical family-lifeos repo and must not
-# be committed here. Run `bash scripts/sync_from_family_lifeos.sh` before deploy.
+# Per SL-0007 / ADR-0011 / ADR-0012, siyuan-lab does not own product migrations
+# or code. These are synced on demand from the canonical family-lifeos repo and
+# must not be committed here.
+# Run `bash scripts/sync_from_family_lifeos.sh` before deploy.
 infra/lifeos-migrations/
 scripts/lifeos_api.py
 scripts/seed_service_token.py
 scripts/ingest_api_test.py
+
+# Added 2026-08-06 (ADR-0012 §2). These three used to be committed here, which
+# made siyuan-lab their de-facto owner. Canonical homes are now:
+#   lifeos_handoff.py   -> family-lifeos/tests/contract/
+#   family_view.py      -> family-lifeos/scripts/experimental/
+#   seed_v8_grants.sql  -> family-lifeos/scripts/experimental/
+# They are synced back because retained lab evidence depends on them:
+#   s1_acceptance.py / retraction_test.py / run.sh / host/escrow.sh -> lifeos_handoff.py
+#   v8_smoke_test.py -> family_view.py source audit, seed_v8_grants.sql fixture
+scripts/lifeos_handoff.py
+scripts/family_view.py
+scripts/seed_v8_grants.sql
 
 # ---- python ----
 __pycache__/
